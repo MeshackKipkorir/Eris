@@ -2,10 +2,12 @@ from django.shortcuts import render,get_object_or_404
 from .models import Post,Category,Comment
 from .forms import CommentForm
 
-def index(request):
+def index(request,category):
     posts = Post.objects.all()
     categories = Category.objects.all()
     
+    if category:
+        posts = posts.filter(category = category)
     
     context = {
         "posts":posts,
