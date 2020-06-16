@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+<div class="comment-form-wrap pt-5">
+    <div class="section-title">
+    <h2 class="mb-5">Share this post</h2>
+    </div>
+    <form class="p-5 bg-light" method = "post">
+    {% csrf_token %}
+    <div class="form-group">
+    {% for field in form %}
+        {{ field.label_tag }} {{ field }}<br>
+    {% endfor %}
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Post Comment" class="btn btn-primary py-3">
+    </div>
+
+    </form>
+</div>
+
+{% if sent %}
+<p>EMail sent succesfully</p>
+{% else %}
+<p>Mail not sent</p>
+{% endif %}
+{% endblock content %}
