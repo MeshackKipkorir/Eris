@@ -26,9 +26,15 @@
             {{ post.body }}
             <div class="pt-5">
                     <p>Categories:  <a href="#">Design</a>, <a href="#">Events</a>  Tags: <a href="#">#html</a>, <a href="#">#trends</a></p>
-                  </div>
-      
-      
+                    <h2>Similar Posts</h2>
+                    {% for post in similar_posts %}
+                    <p>
+                      <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                    </p>
+                    {% empty %}
+                      There are no similar posts yet
+                    {% endfor %}
+            </div>
                   <div class="pt-5">
                     <div class="section-title">
                       <h2 class="mb-5">{{ comments_count }} comments</h2>
