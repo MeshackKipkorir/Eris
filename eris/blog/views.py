@@ -2,17 +2,21 @@ from django.shortcuts import render,get_object_or_404
 from .models import Post,Category,Comment
 from .forms import CommentForm,EmailShareForm
 from django.core.mail import send_mail
+from taggit.models import Tag
 
-def index(request,category=None):
+def index(request,tag_slug=None):
     posts = Post.objects.all()
     categories = Category.objects.all()
+    tag = None
     
-    if category:
-        posts = posts.filter(category = category)
-    
+    if tag_slug:
+        tag = get_object_or_404(Tag,slug = tag_slug)
+        posts = posts.filter(tags__in=[tag])
+     
     context = {
         "posts":posts,
-        "categories":categories
+        "categories":categories,
+        "tag":tag
     }
     return render(request,'blog/index.html',context)
 
