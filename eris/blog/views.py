@@ -3,6 +3,8 @@ from .models import Post,Category,Comment
 from .forms import CommentForm,EmailShareForm
 from django.core.mail import send_mail
 from taggit.models import Tag
+from django.db.models import Count
+
 
 def index(request,tag_slug=None):
     posts = Post.objects.all()
@@ -36,11 +38,17 @@ def post_detail(request,year,month,day,post):
 
     comments = Comment.objects.filter(post = post)
     comments_count = Comment.objects.filter(post = post).all().count()
+    
+    post_tags_id = post.tags.values_list('id',flat=True)
+    similar_posts = Post.published.filter(tags__in=post_tags_id)
+    similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags','-publish')[:4]
+
     context = {
         "post":post,
         "comments":comments,
         "form":form,
-        "comments_count":comments_count
+        "comments_count":comments_count,
+        "similar_posts":similar_posts
     }
     return render(request,'blog/blog-single.html',context)
 
