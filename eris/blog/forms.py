@@ -20,12 +20,18 @@ class CommentForm(forms.Form):
 
 class EmailShareForm(forms.Form):
     name = forms.CharField(max_length = 25,widget = forms.TextInput(attrs = {
-        "placeholder":"Your name..."
+        "placeholder":"Your name...",
+        "class":"form-control"
     }))
-    email = forms.EmailField()
+    email = forms.EmailField(widget = forms.TextInput(attrs = {
+        "placeholder":"Recepients Address",
+        "class":"form-control"
+    }))
     to = forms.EmailField(widget = forms.TextInput(attrs = {
-        "placeholder":"Recepients Address"
+        "placeholder":"Recepients Address",
+        "class":"form-control"
     }))
     comment = forms.CharField(required = False,widget = forms.Textarea(attrs = {
-        "placeholder":"Leave a comment..."
+        "placeholder":"Leave a comment...",
+        "class":"form-control"
     }))
