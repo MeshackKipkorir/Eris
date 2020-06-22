@@ -40,7 +40,7 @@ def post_detail(request,year,month,day,post):
     comments_count = Comment.objects.filter(post = post).all().count()
     
     post_tags_id = post.tags.values_list('id',flat=True)
-    similar_posts = Post.published.filter(tags__in=post_tags_id)
+    similar_posts = Post.objects.filter(tags__in=post_tags_id)
     similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags','-publish')[:4]
 
     context = {
@@ -68,3 +68,11 @@ def post_share(request,post_id):
     else:
         form = EmailShareForm()
     return render(request,'blog/share.html',{'form':form,'post':post,'sent':sent})
+
+def registerUser(request):
+
+    return render(request,'blog/register.html',{})
+
+
+def login(request):
+    return render(request,'blog/login.html',{})
