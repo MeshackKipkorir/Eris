@@ -1,0 +1,4 @@
+djang==3.0.7
+django_taggit==1.2.0
+postgresql
+psycopg2-binary==2.8.4
