@@ -35,3 +35,9 @@ class EmailShareForm(forms.Form):
         "placeholder":"Leave a comment...",
         "class":"form-control"
     }))
+
+
+    class LoginForm(forms.Form):
+        username = forms.CharField()
+        password = forms.CharField(widget = forms.PasswordInput)
+        
