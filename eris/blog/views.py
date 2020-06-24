@@ -1,9 +1,11 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,redirect
 from .models import Post,Category,Comment
-from .forms import CommentForm,EmailShareForm
+from .forms import CommentForm,EmailShareForm,LoginForm
 from django.core.mail import send_mail
 from taggit.models import Tag
 from django.db.models import Count
+from django.contrib.auth import authenticate,login
+from django.http import HttpResponse
 
 
 def index(request,tag_slug=None):
@@ -74,5 +76,24 @@ def registerUser(request):
     return render(request,'blog/register.html',{})
 
 
-def login(request):
-    return render(request,'blog/login.html',{})
+def user_login(request):
+    form = LoginForm()
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+
+    if form.is_valid():
+        cd = form.cleaned_data
+        user = authenticate(request,username = cd['username'],password = cd['password'])
+        
+        if user is not None:
+            if user.is_active:
+                login(request,user)
+                return redirect('/feed')
+
+            else: 
+                return  HttpResponse('Account has been disabled')
+        
+        else:
+            return HttpResponse('Invalid Login attempt')
+
+    return render(request,'registration/login.html',{'form':form})
