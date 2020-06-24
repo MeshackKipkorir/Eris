@@ -88,7 +88,7 @@ def user_login(request):
         if user is not None:
             if user.is_active:
                 login(request,user)
-                return redirect('/feed')
+                return redirect('/')
 
             else: 
                 return  HttpResponse('Account has been disabled')
