@@ -1,6 +1,7 @@
 from django.urls import path 
 from . import views
 from .feeds import LatestPostsFeed
+from django.contrib.auth import views as auth_views
 
 app_name = 'blog'
 
@@ -11,5 +12,5 @@ urlpatterns = [
     path('<int:post_id>/share/',views.post_share,name='share_post'),
     path('feed/',LatestPostsFeed(), name = 'post_feed'),
     path('register/',views.registerUser,name = 'register'),
-    path('login',views.login,name = 'login'),
+    path('login',views.user_login,name = 'login'),
 ]

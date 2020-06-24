@@ -1,0 +1,4 @@
+[2020-06-15 14:12:27.569] [main] [error] [File Watcher (node.js)] Error: ENOENT: no such file or directory, stat '/root/Desktop/Eris-project/Eris/eris/User'
+[2020-06-15 14:12:30.552] [main] [info] update#setState idle
+[2020-06-15 14:13:09.908] [main] [info] update#setState checking for updates
+[2020-06-15 14:13:20.854] [main] [info] update#setState available for download
