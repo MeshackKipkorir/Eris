@@ -1,6 +1,6 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from .models import Post,Category,Comment
-from .forms import CommentForm,EmailShareForm,LoginForm
+from .forms import CommentForm,EmailShareForm,LoginForm,UserRegistrationForm
 from django.core.mail import send_mail
 from taggit.models import Tag
 from django.db.models import Count
@@ -72,8 +72,20 @@ def post_share(request,post_id):
     return render(request,'blog/share.html',{'form':form,'post':post,'sent':sent})
 
 def registerUser(request):
-
-    return render(request,'blog/register.html',{})
+    form = UserRegistrationForm()
+    
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            new_user = form.save(commit = False)
+            new_user.set_password(form.cleaned_data['password'])
+            new_user.save()
+            return render(request,'registration/register_done.html',{'new_user':new_user})
+        
+        else:
+            form = UserRegistrationForm()
+            
+    return render(request,'registration/register.html',{'form':form})
 
 
 def user_login(request):
