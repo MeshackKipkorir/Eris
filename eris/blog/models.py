@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User 
 from django.urls import reverse 
 from taggit.managers import TaggableManager
+from django.conf import settings
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
@@ -50,4 +51,13 @@ class Comment(models.Model):
     created_on = models.DateTimeField(auto_now_add = True)
     email = models.EmailField(null = True)
     post = models.ForeignKey('Post',on_delete = models.CASCADE)
+    
+
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    photo = models.ImageField(upload_to='users/%Y/%m/%d', blank=True)
+    bio = models.TextField(blank=True)
+    
+    def __str__(self):
+        return f'Profile for user {self.user.username}'
     
