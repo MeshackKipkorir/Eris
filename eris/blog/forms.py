@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile,Post
 
 class CommentForm(forms.Form):
     author = forms.CharField(max_length = 100, widget = forms.TextInput(attrs = {
@@ -63,3 +63,13 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('bio','photo')
+
+class AddBlogForm(forms.ModelForm):
+    title = forms.CharField(max_length=30)
+    body = forms.Textarea()
+    slug = forms.SlugField(allow_unicode=True)
+
+    class Meta:
+        model = Post
+        fields = ('title','body','category','slug','status')
+    

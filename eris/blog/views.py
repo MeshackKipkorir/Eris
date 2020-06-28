@@ -1,11 +1,13 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import Post,Category,Comment
-from .forms import CommentForm,EmailShareForm,LoginForm,UserRegistrationForm
+from .models import Post,Category,Comment,Profile
+from .forms import CommentForm,EmailShareForm,LoginForm,UserRegistrationForm,ProfileEditForm,AddBlogForm
 from django.core.mail import send_mail
 from taggit.models import Tag
 from django.db.models import Count
 from django.contrib.auth import authenticate,login
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 def index(request,tag_slug=None):
@@ -80,6 +82,7 @@ def registerUser(request):
             new_user = form.save(commit = False)
             new_user.set_password(form.cleaned_data['password'])
             new_user.save()
+            Profile.objects.create(user=new_user)
             return render(request,'registration/register_done.html',{'new_user':new_user})
         
         else:
@@ -109,3 +112,35 @@ def user_login(request):
             return HttpResponse('Invalid Login attempt')
 
     return render(request,'registration/login.html',{'form':form})
+
+
+@login_required
+def edit(request):
+    profile_form = ProfileEditForm()
+
+    if request.method == 'POST':
+        profile_form = ProfileEditForm(instance = request.user, data = request.POST)
+
+        if profile_form.is_valid():
+            profile_form.save()
+
+    else:
+        profile_form = ProfileEditForm()
+    return render(request,'blog/edit.html',{'profile_form':profile_form})
+
+@login_required
+def add_blog(request):
+    message = ""
+    form = AddBlogForm()
+    if request.method == "POST":
+        form = AddBlogForm(instance=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            form = AddBlogForm()
+            return redirect('index')
+            
+    else:
+        form = AddBlogForm()
+    
+
+    return render(request,'blog/add-blog.html',{'form':form,'message':message})
