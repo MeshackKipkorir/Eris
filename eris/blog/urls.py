@@ -12,5 +12,7 @@ urlpatterns = [
     path('<int:post_id>/share/',views.post_share,name='share_post'),
     path('feed/',LatestPostsFeed(), name = 'post_feed'),
     path('register/',views.registerUser,name = 'register'),
-    path('login',views.user_login,name = 'login'),
+    path('login/',views.user_login,name = 'login'),
+    path('edit/',views.edit,name='edit_profile'),
+    path('add/',views.add_blog,name='add_blog'),
 ]
