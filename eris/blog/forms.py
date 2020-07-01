@@ -71,5 +71,5 @@ class AddBlogForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ('title','body','category','slug','status')
+        fields = ('title','body','category','slug','tags','status')
     

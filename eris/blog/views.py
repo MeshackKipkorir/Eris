@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate,login
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.urls import reverse
 
 
 def index(request,tag_slug=None):
@@ -42,7 +43,7 @@ def post_detail(request,year,month,day,post):
 
     comments = Comment.objects.filter(post = post)
     comments_count = Comment.objects.filter(post = post).all().count()
-    
+    tags = post.tags.all
     post_tags_id = post.tags.values_list('id',flat=True)
     similar_posts = Post.objects.filter(tags__in=post_tags_id)
     similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags','-publish')[:4]
@@ -52,7 +53,8 @@ def post_detail(request,year,month,day,post):
         "comments":comments,
         "form":form,
         "comments_count":comments_count,
-        "similar_posts":similar_posts
+        "similar_posts":similar_posts,
+        "tags":tags
     }
     return render(request,'blog/blog-single.html',context)
 
@@ -130,17 +132,15 @@ def edit(request):
 
 @login_required
 def add_blog(request):
-    message = ""
     form = AddBlogForm()
-    if request.method == "POST":
-        form = AddBlogForm(instance=request.user, data=request.POST)
-        if form.is_valid():
-            form.save()
-            form = AddBlogForm()
-            return redirect('index')
-            
-    else:
-        form = AddBlogForm()
     
+    if request.method == "POST":
+        form = AddBlogForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit = False)
+            post.author = request.user
+            post.save()
+            form = AddBlogForm()
+            return redirect('/')
 
-    return render(request,'blog/add-blog.html',{'form':form,'message':message})
+    return render(request,'blog/add-blog.html',{'form':form})

@@ -25,7 +25,7 @@
             </div>
             {{ post.body }}
             <div class="pt-5">
-                    <p>Categories:  <a href="#">Design</a>, <a href="#">Events</a>  Tags: <a href="#">#html</a>, <a href="#">#trends</a></p>
+                    <p>Categories:  <a href="#">Design</a>, <a href="#">Events</a>  Tags: {% for tag in tags %} <a href="{% url 'blog:post_list_by_tag' tag.slug %}"> {{tag.name}} </a>{% endfor %}</p>
                     <h2>Similar Posts</h2>
                     {% for post in similar_posts %}
                     <p>
