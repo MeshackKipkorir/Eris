@@ -1,2 +1,2 @@
 # Eris
-A platform for people with ideas to write a blog on
+A blog platform where users can write and manage their blog posts
